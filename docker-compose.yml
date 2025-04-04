@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/zaptrone
+      - JWT_SECRET=your_jwt_secret_key
+      - RAZORPAY_KEY_ID=your_razorpay_key
+      - RAZORPAY_KEY_SECRET=your_razorpay_secret
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
